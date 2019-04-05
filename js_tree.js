@@ -37,74 +37,87 @@
       node and false if it doesn't
 */
 
-var nodeCount = 0;
-var elemCount = 0;
-var textCount = 0;
-var wsCount = 0;
+// var nodeCount = 0;
+// var elemCount = 0;
+// var textCount = 0;
+// var wsCount = 0;
 
-window.addEventListener("load", makeTree);
+// window.addEventListener("load", makeTree);
 
-function makeTree() {
-      var fragment = document.createElement("aside");
-      fragment.setAttribute("id", "treeBox");
-      var fragchild1 = document.createElement("h1");
-      fragment.appendChild(fragchild1);
-      fragchild1.appendChild(document.createTextNode("Node Tree"));
-      document.getElementById("main").appendChild(fragment);
+// function makeTree() {
+//       var fragment = document.createElement("aside");
+//       fragment.setAttribute("id", "treeBox");
+//       var fragchild1 = document.createElement("h1");
+//       fragment.appendChild(fragchild1);
+//       fragchild1.appendChild(document.createTextNode("Node Tree"));
+//       document.getElementById("main").appendChild(fragment);
 
-      var nodeList = document.createElement("ol")
-      fragment.appendChild(nodeList);
+//       var nodeList = document.createElement("ol")
+//       fragment.appendChild(nodeList);
 
-      var sourceArticle = document.querySelectorAll("#main article");
 
-      makeBranches(sourceArticle, nodeList);
+//       var sourceArticle = document.querySelectorAll("#main article *");
 
-      document.getElementById("totalNodes").innerHTML = nodeCount;
-      document.getElementById("elemNodes").innerHTML = elemCount;
-      document.getElementById("textNodes").innerHTML = textCount;
-      document.getElementById("wsNodes").innerHTML = wsCount;
-}
+//       makeBranches(sourceArticle, nodeList);
 
-function makeBranches(treeNode, nestedList) {
-      nodeCount++;
-      var liElem = document.createElement("li");
-      var spanElem = document.createTextNode("+--<span></span>");
-      liElem.appendChild(spanElem);
-      nestedList.appendChild(liElem);
+//       document.getElementById("totalNodes").innerHTML = nodeCount;
+//       document.getElementById("elemNodes").innerHTML = elemCount;
+//       document.getElementById("textNodes").innerHTML = textCount;
+//       document.getElementById("wsNodes").innerHTML = wsCount;
+// }
 
-      if (treeNode.nodeType == 1) {
-            console.log("this is true")
-            elemCount++;
-            spanElem.setAttribute("class", "elementNode");
-            spanElem.appendChild("<" + spanElem.nodeName.textContent + ">")
-      } else if (treeNode.nodeType == 2) {
-            console.log("this is true 2")
-            textCount++;
-            var textString = treeNode;
-            if (isWhiteSpaceNode(textString) == true) {
-                  console.log("this is true 3")
-                  wsCount++;
-                  spanElem.setAttribute("class", "whiteSpaceNode");
-                  var fragtext2 = "#text";
-                  spanElem.appendChild(fragtext2);
-            } else {
-                  console.log("this is true 4")
-                  spanElem.setAttribute("class", "textNode")
-                  spanElem.appendChild("" + textString + "")
-            }
+// function makeBranches(treeNode, nestedList) {
+//       nodeCount++;
+//       var liElem = document.createElement("li");
+//       var spanText = document.createTextNode("+--")
+//       var spanElem = document.createElement("span")
+//       spanElem.appendChild(spanText)
+//       liElem.appendChild(spanElem);
+//       nestedList.appendChild(liElem);
+
+
+//       if (treeNode[0].nodeType == 1) {
+//             console.log("this is true")
+//             elemCount++;
+//             spanElem.setAttribute("class", "elementNode");
+//             spanElem.appendChild("<" + spanElem.nodeName.textContent + ">")
+//       } else if (treeNode.nodeType == 2) {
+//             console.log("this is true 2")
+//             textCount++;
+//             var textString = treeNode;
+//             if (isWhiteSpaceNode(textString) == true) {
+//                   console.log("this is true 3")
+//                   wsCount++;
+//                   spanElem.setAttribute("class", "whiteSpaceNode");
+//                   var fragtext2 = "#text";
+//                   spanElem.appendChild(fragtext2);
+//             } else {
+//                   console.log("this is true 4")
+//                   spanElem.setAttribute("class", "textNode")
+//                   spanElem.appendChild("" + textString + "")
+//             }
+//       }
+//       if (document.getElementById("topArticle").childNodes.length > 0) {
+
+//             var newList = document.createElement("ol");
+//             newList.appendChild(document.createTextNode("|"));
+
+//             nestedList.appendChild(newList);
+//             for (var n = treeNode.firstChild; n !== null; n = n.nextSibling) {
+//                   makeBranches(n, newList);
+//             }
+//       }
+
+// }
+window.addEventListener("onload", hopethisworks)
+var nodes;
+
+function hopethisworks() {
+      var nodes = document.querySelectorAll("#main article *");
+      for (var i = 0; i < nodes.length; i++) {
+
       }
-      if (document.getElementById("main").childNodes > 0) {
-            console.log("this is true 5")
-            var newList = document.createElement("ol");
-            newList.appendChild(document.createTextNode("|"));
-            nestedList.appendChild("newList");
-            for (var n = document.getElementById("main").firstChild; n !== null; n = n.nextSibling) {
-                  makeBranches(n, newList);
-            }
-      }
-
 }
-
 
 // PREMADE
 function isWhiteSpaceNode(tString) {
