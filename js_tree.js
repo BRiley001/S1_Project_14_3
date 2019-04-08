@@ -37,87 +37,93 @@
       node and false if it doesn't
 */
 
-// var nodeCount = 0;
-// var elemCount = 0;
-// var textCount = 0;
-// var wsCount = 0;
+// Global variables to be used later
+var nodeCount = 1;
+var elemCount = 0;
+var textCount = 1;
+var wsCount = 1;
 
-// window.addEventListener("load", makeTree);
+// loads the tree in on the page laoding
+window.onload = makeTree;
 
-// function makeTree() {
-//       var fragment = document.createElement("aside");
-//       fragment.setAttribute("id", "treeBox");
-//       var fragchild1 = document.createElement("h1");
-//       fragment.appendChild(fragchild1);
-//       fragchild1.appendChild(document.createTextNode("Node Tree"));
-//       document.getElementById("main").appendChild(fragment);
+// creates the aside tree on the right
+function makeTree() {
+      // fragments for the aside on the right
+      var aside = document.createElement("aside");
+      aside.id = "treeBox";
+      aside.innerHTML = "<h1>Node Tree</h1>";
 
-//       var nodeList = document.createElement("ol")
-//       fragment.appendChild(nodeList);
+      // inserts the aside into the document inside the main article
+      var sectionMain = document.getElementById("main");
+      sectionMain.appendChild(aside);
 
+      // creates the list for the aside
+      var nodeList = document.createElement("ol")
+      aside.appendChild(nodeList);
 
-//       var sourceArticle = document.querySelectorAll("#main article *");
+      // sets the article that will be used as a source (the book says to use querySelectorAll() but that breaks everything)
+      var sourceArticle = document.querySelector("#main article");
 
-//       makeBranches(sourceArticle, nodeList);
+      // runs the make branches function for the aside
+      makeBranches(sourceArticle, nodeList);
 
-//       document.getElementById("totalNodes").innerHTML = nodeCount;
-//       document.getElementById("elemNodes").innerHTML = elemCount;
-//       document.getElementById("textNodes").innerHTML = textCount;
-//       document.getElementById("wsNodes").innerHTML = wsCount;
-// }
-
-// function makeBranches(treeNode, nestedList) {
-//       nodeCount++;
-//       var liElem = document.createElement("li");
-//       var spanText = document.createTextNode("+--")
-//       var spanElem = document.createElement("span")
-//       spanElem.appendChild(spanText)
-//       liElem.appendChild(spanElem);
-//       nestedList.appendChild(liElem);
-
-
-//       if (treeNode[0].nodeType == 1) {
-//             console.log("this is true")
-//             elemCount++;
-//             spanElem.setAttribute("class", "elementNode");
-//             spanElem.appendChild("<" + spanElem.nodeName.textContent + ">")
-//       } else if (treeNode.nodeType == 2) {
-//             console.log("this is true 2")
-//             textCount++;
-//             var textString = treeNode;
-//             if (isWhiteSpaceNode(textString) == true) {
-//                   console.log("this is true 3")
-//                   wsCount++;
-//                   spanElem.setAttribute("class", "whiteSpaceNode");
-//                   var fragtext2 = "#text";
-//                   spanElem.appendChild(fragtext2);
-//             } else {
-//                   console.log("this is true 4")
-//                   spanElem.setAttribute("class", "textNode")
-//                   spanElem.appendChild("" + textString + "")
-//             }
-//       }
-//       if (document.getElementById("topArticle").childNodes.length > 0) {
-
-//             var newList = document.createElement("ol");
-//             newList.appendChild(document.createTextNode("|"));
-
-//             nestedList.appendChild(newList);
-//             for (var n = treeNode.firstChild; n !== null; n = n.nextSibling) {
-//                   makeBranches(n, newList);
-//             }
-//       }
-
-// }
-window.addEventListener("onload", hopethisworks)
-var nodes;
-
-function hopethisworks() {
-      var nodes = document.querySelectorAll("#main article *");
-      for (var i = 0; i < nodes.length; i++) {
-
-      }
+      // displays the number of differenet types of nodes within the page
+      document.getElementById("totalNodes").textContent = nodeCount;
+      document.getElementById("elemNodes").textContent = elemCount;
+      document.getElementById("textNodes").textContent = textCount;
+      document.getElementById("wsNodes").textContent = wsCount;
 }
+
+// the function will make the branches of the page
+function makeBranches(treeNode, nestedList) {
+      // nodeCount increases every time the function is run
+      nodeCount++;
+      // A list item is created with +-- beside it
+      var liElem = document.createElement("li");
+      liElem.innerHTML = ("+--");
+
+      // A span is created to put into different nodes
+      var spanElem = document.createElement("span")
+      liElem.appendChild(spanElem);
+      nestedList.appendChild(liElem);
+
+      // Checks to see if the element is either an element or text node
+      if (treeNode.nodeType === 1) {
+            // increases the number of element nodes
+            elemCount++;
+            // sets the class of each span, and puts in the element name that it is
+            spanElem.setAttribute("class", "elementNode");
+            spanElem.textContent = "<" + treeNode.nodeName + ">"
+      } else if (treeNode.nodeType === 3) {
+            // increases the number of text nodes
+            textCount++;
+            // sets the text string
+            var textString = treeNode.nodeValue;
+
+            // Checks to see if the text node is white space or not, and subsequently sets their classes to reflect this
+            if (isWhiteSpaceNode(textString)) {
+                  // increases the number of white spave nodes
+                  wsCount++;
+                  spanElem.setAttribute("class", "whiteSpaceNode");
+                  spanElem.textContent = textString;
+
+            } else {
+                  spanElem.setAttribute("class", "textNode")
+                  spanElem.textContent = textString;
+            }
+      }
+      // Will add a decorative pipe between each of the elements and text nodes wihtin the aside, and adds recursion so all nodes are accounted for
+      if (treeNode.childNodes.length > 0) {
+            var newList = document.createElement("ol");
+            newList.innerHTML = "|";
+            nestedList.appendChild(newList);
+            for (var n = treeNode.firstChild; n != null; n = n.nextSibling) {
+                  makeBranches(n, newList);
+            }
+      }
+
+}
+
 
 // PREMADE
 function isWhiteSpaceNode(tString) {
